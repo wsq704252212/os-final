@@ -5,17 +5,25 @@
 #include <fcntl.h>
 #include <sys/time.h>
 
+int MiB = 1024 * 1024;
 
-int
+struct count
+{
+  unsigned long byteCnt, blockCnt;
+};
+
+// return block cnt
+struct count
 readFile(int fd, int blocksize) {
   int n, i;
   // int is 4 bytes
   int bufsize = blocksize / 4;
   int *buf = malloc(bufsize * sizeof(int));
-  int cnt = 0;
+  struct count cnt = {0, 0};
 
   while ((n = read(fd, buf, blocksize)) > 0) {
-    cnt++;
+    cnt.blockCnt++;
+    cnt.byteCnt += n;
   }
 
   if(n < 0){
@@ -51,10 +59,11 @@ main(int argc, char *argv[])
   }
   
   double start = now();
-  int cnt = readFile(fd, blockSize);
+  struct count cnt = readFile(fd, blockSize);
   double end = now();
-  printf("Finished reading in %f seconds\n", end - start);  
-  printf("block_count: %d\n", cnt);
+  printf("Finished reading in %f seconds\n", end - start); 
+  printf("Reading speed: %f MiB/s\n", (cnt.byteCnt/ (double)(MiB)) / (end - start)); 
+  printf("block_count: %ld\n", cnt.blockCnt);
 
   close(fd);
 
