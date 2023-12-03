@@ -23,3 +23,10 @@ The wall time to read file in different block size is output to raw-speed.
 test-cache.sh <filename>
 ``` 
 The wall time to read file in different block size without/with page cache is output to raw-noncache-speed/raw-cache-speed.
+
+
+5. Syscall
+```
+test-syscall.sh <filename>
+``` 
+The wall time to make syscall is output to stdout.

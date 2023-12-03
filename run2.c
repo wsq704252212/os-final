@@ -65,6 +65,10 @@ main(int argc, char *argv[])
   printf("Reading speed: %f MiB/s\n", (cnt.byteCnt/ (double)(MiB)) / (end - start)); 
   printf("block_count: %ld\n", cnt.blockCnt);
 
+  if (blockSize == 1) {
+    printf("read() system call number per second: %f B/s\n", cnt.byteCnt / (end - start)); 
+  }
+
   close(fd);
 
   exit(0);
