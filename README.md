@@ -16,4 +16,10 @@ run2 <filename> <block_size>
 ```
 test-raw.sh <filename>
 ``` 
-The wall time to read file in different size is output to raw-speed.
+The wall time to read file in different block size is output to raw-speed.
+
+4. Cache
+```
+test-cache.sh <filename>
+``` 
+The wall time to read file in different block size without/with page cache is output to raw-noncache-speed/raw-cache-speed.
