@@ -29,13 +29,13 @@ void *readBlock(void *arg) {
     long int n;
     long int bufsize = targ->blocksize / 4;
 
-    unsigned int *buf = malloc(bufsize * sizeof(unsigned int));
+    unsigned int *buf = aligned_alloc(sysconf(_SC_PAGESIZE), bufsize * sizeof(unsigned int));
     if (!buf) {
         perror("Memory allocation failed");
         pthread_exit(NULL);
     }
 
-    int fd = open(targ->filename, O_RDONLY);
+    int fd = open(targ->filename, O_RDONLY|O_DIRECT);
     if (fd == -1) {
         perror("Failed to open file in thread");
         free(buf);
@@ -74,13 +74,14 @@ void *readBlock(void *arg) {
 }
 
 int main(int argc, char *argv[]) {
-    int threadsNum, blockSize;
+    int threadsNum;
+    long int blockSize;
     char *file;
 
     // TODO argc == 2, use default
     if (argc == 2) {
-        threadsNum = 32;
-        blockSize = 4096;
+        threadsNum = 96;
+        blockSize = 479232;
     } else if (argc == 4) {
         threadsNum = atoi(argv[2]);
         blockSize = atoi(argv[3]);
